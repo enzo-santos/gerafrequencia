@@ -59,4 +59,4 @@ Ou, se você ativou o executável globalmente:
 gtimesheet assets/example/config.yaml
 ```
 
-Será gerado um arquivo PDF de saída contendo as informações lidas do arquivo YAML.
+Será gerado um [arquivo PDF de saída](https://github.com/enzo-santos/gerafrequencia/blob/main/assets/example/Frequencia_2023-06.pdf) contendo as informações lidas do arquivo YAML.
