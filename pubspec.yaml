@@ -1,0 +1,33 @@
+name: gerafrequencia
+description: Gerador de frequências a partir de um arquivo YAML.
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.2 <4.0.0'
+
+dependencies:
+  pdf: ^3.10.4
+  http: ^1.0.0
+  path: ^1.8.3
+  yaml: ^3.1.2
+  intl: ^0.18.1
+  dartx: ^1.1.0
+  dotenv: ^4.1.0
+  dorm_framework: ^1.0.0-alpha.4
+  dorm_annotations: ^1.0.0-alpha.4
+  args: ^2.4.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  build_runner: ^2.4.6
+  json_serializable: ^6.7.1
+  dorm_generator:
+    git:
+      url: https://github.com/beet-software/dorm.git
+      path: dorm_generator
+      ref: develop
+
+executables:
+  gtimesheet: generate

@@ -1,0 +1,76 @@
+config:
+  ano: 2023
+  mes: 6
+  cabecalho: assets/example/header.jpg
+  enforcar: true
+
+diretorias:
+  - sigla: DADM
+    orgao: SEAD
+    nome: Diretoria de Administração
+    endereco:
+      logradouro: Avenida das Flores
+      numero: 123
+      bairro: Jardim Primavera
+      cep: 01234-567
+      cidade: Cidade Fictícia
+      uf: UF
+  - sigla: DPCD
+    orgao: SECULT
+    nome: Diretoria de Patrimônio Cultural e Diversidade
+    endereco:
+      logradouro: Rua das Palmeiras
+      numero: 456
+      bairro: Centro
+      cep: 12345-678
+      cidade: Cidade Imaginária
+      uf: UF
+  - sigla: DTEC
+    orgao: SETI
+    nome: Diretoria de Tecnologia
+    endereco:
+      logradouro: Avenida dos Girassóis
+      numero: 789
+      bairro: Vila Feliz
+      cep: 98765-432
+      cidade: Cidade dos Sonhos
+      uf: UF
+
+departamentos:
+  - sigla: CCO
+    diretoria: DADM/SEAD
+    nome: Coordenação de Compras e Contratos
+    telefone: (91) 3258-7921
+    email: cco@sead.gov.br
+  - sigla: CAP
+    diretoria: DADM/SEAD
+    nome: Coordenação de Administração de Pessoal
+    telefone: (91) 3212-3456
+    email: cap@sead.gov.br
+  - sigla: CTI
+    diretoria: DADM/SEAD
+    nome: Coordenação de Tecnologia da Informação
+    telefone: (91) 3298-7654
+    email: cti@sead.gov.br
+
+servidores:
+  - matricula: 0912153-023
+    departamento: CCO/DADM/SEAD
+    nome: Marina Oliveira Costa
+    cargo: Analista de Compras
+  - matricula: 0328112-008
+    departamento: CCO/DADM/SEAD
+    nome: Pedro Henrique Lima Silva
+    cargo: Assistente Administrativo
+  - matricula: 0765009-016
+    departamento: CCO/DADM/SEAD
+    nome: Ana Carolina Pereira Nunes
+    cargo: Estagiária de Contratos
+  - matricula: 0223098-005
+    departamento: CAP/DADM/SEAD
+    nome: Julia Santos Rodrigues
+    cargo: Coord. de Administração de Pessoal
+  - matricula: 0102030-001
+    departamento: CAP/DADM/SEAD
+    nome: Lucas Souza Santos
+    cargo: Assistente de R. Humanos

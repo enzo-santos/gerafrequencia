@@ -1,0 +1,109 @@
+import 'package:dorm_annotations/dorm_annotations.dart';
+import 'package:dorm_framework/dorm_framework.dart';
+
+part 'models.dorm.dart';
+
+part 'models.g.dart';
+
+@Data()
+abstract class _Address {
+  @Field(name: 'logradouro')
+  String get streetName;
+
+  @Field(name: 'numero')
+  int get number;
+
+  @Field(name: 'bairro')
+  String get district;
+
+  @Field(name: 'cep')
+  String get cep;
+
+  @Field(name: 'cidade')
+  String get city;
+
+  @Field(name: 'uf')
+  String get state;
+}
+
+@Data()
+abstract class _Division {
+  /// Sigla desta diretoria.
+  ///
+  /// Deve ser único dentro do órgão.
+  @Field(name: 'sigla')
+  String get id;
+
+  /// Nome desta diretoria.
+  @Field(name: 'nome')
+  String get name;
+
+  /// Nome do órgão o qual esta diretoria faz parte.
+  @Field(name: 'orgao')
+  String get companyName;
+
+  @ModelField(name: 'endereco', referTo: _Address)
+  get address;
+}
+
+@Data()
+abstract class _Config {
+  /// Ano vigente da frequência a ser gerada.
+  @Field(name: 'ano')
+  int get year;
+
+  /// Mês vigente da frequência a ser gerada.
+  @Field(name: 'mes')
+  int get month;
+
+  /// Caminho absoluto da imagem para ser usada como cabeçalho.
+  @Field(name: 'cabecalho')
+  String? get headerPath;
+
+  /// Se o único dia entre um domingo e um feriado deve ser considerado
+  /// como facultado.
+  @Field(name: 'enforcar', defaultValue: false)
+  bool get fill;
+}
+
+@Data()
+abstract class _Department {
+  @Field(name: 'nome')
+  String get name;
+
+  @Field(name: 'sigla')
+  String get id;
+
+  @Field(name: 'telefone')
+  String get phoneNumber;
+
+  @Field(name: 'email')
+  String get email;
+
+  @Field(name: 'diretoria')
+  String get location;
+}
+
+@Data()
+abstract class _Employee {
+  @Field(name: 'matricula')
+  String get id;
+
+  @Field(name: 'nome')
+  String get name;
+
+  @Field(name: 'cargo')
+  String get role;
+
+  @Field(name: 'departamento')
+  String get location;
+}
+
+@Data()
+abstract class _Holiday {
+  @Field(name: 'name')
+  String get name;
+
+  @Field(name: 'date')
+  DateTime get date;
+}
