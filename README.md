@@ -25,6 +25,12 @@ Com o Dart instalado na sua máquina, instale as dependências do projeto:
 dart pub get
 ```
 
+Gere os modelos utilizados pelo programa:
+
+```shell
+dart run build_runner build
+```
+
 Opcionalmente, [obtenha uma chave de API](https://api.invertexto.com/) do invertexto, 
 especificamente do serviço de feriados. Crie um arquivo *.env* no diretório raiz do repositório e 
 adicione o seguinte conteúdo:
