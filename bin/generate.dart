@@ -17,7 +17,7 @@ void main(List<String> args) async {
   final results = parser.parse(args);
 
   final configFile =
-      File(results.rest.firstOrNull ?? p.join('assets', 'config.yaml'));
+      File(results.rest.firstOrNull ?? p.join('assets', 'gerafrequencia.config.yaml'));
 
   final data = loadYaml(await configFile.readAsString()) as YamlMap;
   final config = Config.fromJson(data['config']);

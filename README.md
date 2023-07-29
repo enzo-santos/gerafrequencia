@@ -31,9 +31,8 @@ Gere os modelos utilizados pelo programa:
 dart run build_runner build
 ```
 
-Opcionalmente, [obtenha uma chave de API](https://api.invertexto.com/) do invertexto, 
-especificamente do serviço de feriados. Crie um arquivo *.env* no diretório raiz do repositório e 
-adicione o seguinte conteúdo:
+Opcionalmente, [obtenha uma chave de API](https://api.invertexto.com/) do invertexto, especificamente do serviço de
+feriados. Crie um arquivo *.env* no diretório raiz do repositório e adicione o seguinte conteúdo:
 
 ```env
 HOLIDAYS_API_TOKEN=<SEU TOKEN DE API AQUI>
@@ -47,16 +46,35 @@ dart pub global activate --source path .
 
 ## Uso
 
-Rode o arquivo de exemplo:
+Rode utilizando o arquivo de exemplo:
 
 ```shell
-dart run bin/generate.dart assets/example/config.yaml
+dart run bin/generate.dart assets/example/gerafrequencia.config.yaml
 ```
 
 Ou, se você ativou o executável globalmente:
 
 ```shell
-gtimesheet assets/example/config.yaml
+gtimesheet assets/example/gerafrequencia.config.yaml
 ```
 
-Será gerado um [arquivo PDF de saída](https://github.com/enzo-santos/gerafrequencia/blob/main/assets/example/Frequencia_2023-06.pdf) contendo as informações lidas do arquivo YAML.
+Será gerado um
+[arquivo PDF de saída](https://github.com/enzo-santos/gerafrequencia/blob/main/assets/example/Frequencia_2023-06.pdf)
+contendo as informações lidas do arquivo YAML.
+
+### Validando o arquivo de configuração
+
+Este projeto contém um [arquivo *schema.json*](https://github.com/enzo-santos/gerafrequencia/blob/main/schema.json) para
+validar seu arquivo de configuração customizado. Para utilizar no IntelliJ IDEA, por exemplo,
+
+1. com a IDE aberta, abra o diretório do projeto
+2. crie um arquivo YAML chamado *gerafrequencia.config.yaml* em qualquer lugar do projeto e abra-o
+3. no canto inferior direito da tela, clique em "No JSON schema"
+4. na lista suspensa que aparecerá, clique em "New Schema Mapping..."
+5. no campo "Name", insira *gerafrequencia*
+6. no campo "Schema file or URL", selecione o arquivo *schema.json* que está na raiz deste repositório
+7. no campo "Schema version", selecione "JSON Schema version 4"
+8. no símbolo de +, selecione "Add File Path Pattern" e insira *gerafrequencia.config.yaml*
+9. clique em OK
+
+Ao seguir esses passos, seu arquivo YAML poderá ser validado ao editá-lo usando a IDE.

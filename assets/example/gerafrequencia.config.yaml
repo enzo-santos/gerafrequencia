@@ -1,6 +1,6 @@
 config:
   ano: 2023
-  mes: 6
+  mes: 12
   cabecalho: assets/example/header.jpg
   enforcar: true
 
