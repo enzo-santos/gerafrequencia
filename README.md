@@ -31,8 +31,9 @@ Gere os modelos utilizados pelo programa:
 dart run build_runner build
 ```
 
-Opcionalmente, [obtenha uma chave de API](https://api.invertexto.com/) do invertexto, especificamente do serviço de
-feriados. Crie um arquivo *.env* no diretório raiz do repositório e adicione o seguinte conteúdo:
+Opcionalmente, [obtenha uma chave de API](https://api.invertexto.com/) do invertexto, 
+especificamente do serviço de feriados. Crie um arquivo *.env* no diretório raiz do repositório e 
+adicione o seguinte conteúdo:
 
 ```env
 HOLIDAYS_API_TOKEN=<SEU TOKEN DE API AQUI>
@@ -43,6 +44,23 @@ Opcionalmente, ative o executável globalmente:
 ```shell
 dart pub global activate --source path .
 ```
+
+## Interface gráfica
+
+Este projeto contém uma aplicação Flutter otimizada para Windows que fornece uma interface gráfica
+para a geração de frequências. Está disponível no diretório *example/* e atualmente é possível 
+executá-la apenas com o Flutter instalado, executando os seguintes comandos:
+
+```shell
+cd example
+flutter pub get
+flutter build windows
+```
+
+Isso gerará um arquivo *example.exe* no diretório *example/build/windows/runner/Release/*.
+
+Futuramente, será disponibilizado como executável nas 
+[*Releases*](https://github.com/enzo-santos/gerafrequencia/releases) do repositório.
 
 ## Uso
 
@@ -55,11 +73,11 @@ dart run bin/generate.dart assets/example/gerafrequencia.config.yaml
 Ou, se você ativou o executável globalmente:
 
 ```shell
-gtimesheet assets/example/gerafrequencia.config.yaml
+gerafrequencia assets/example/gerafrequencia.config.yaml
 ```
 
 Será gerado um
-[arquivo PDF de saída](https://github.com/enzo-santos/gerafrequencia/blob/main/assets/example/Frequencia_2023-06.pdf)
+[arquivo PDF de saída](https://github.com/enzo-santos/gerafrequencia/blob/main/assets/example/Frequencia-2023_06.pdf)
 contendo as informações lidas do arquivo YAML.
 
 ### Validando o arquivo de configuração

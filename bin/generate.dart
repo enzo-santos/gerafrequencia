@@ -22,7 +22,7 @@ void main(List<String> args) async {
   final data = loadYaml(await configFile.readAsString()) as YamlMap;
   final config = Config.fromJson(data['config']);
 
-  final pdfBytes = await createTimesheet(Map.from(data));
+  final pdfBytes = await createTimesheetFromJson(Map.from(data));
 
   final suffix =
       intl.DateFormat('yyyy-MM').format(DateTime(config.year, config.month));

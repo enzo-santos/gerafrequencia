@@ -12,10 +12,34 @@ import 'package:pdf/widgets.dart' as pw;
 
 import 'models.dart';
 
-Future<Uint8List> createTimesheet(Map<String, Object?> yamlData) async {
+Future<Uint8List> createTimesheetFromJson(Map<String, Object?> jsonData) async {
+  final DotEnv env = DotEnv()..load();
+  final String? holidaysApiToken = env['HOLIDAYS_API_TOKEN'];
+
+  return createTimesheet(
+    config: Config.fromJson(jsonData['config'] as Map),
+    allDivisions: (jsonData['diretorias'] as List)
+        .map((data) => Division.fromJson(data as Map<String, Object?>))
+        .toList(),
+    allDepartments: (jsonData['departamentos'] as List)
+        .map((data) => Department.fromJson(data as Map<String, Object?>))
+        .toList(),
+    allEmployees: (jsonData['servidores'] as List)
+        .map((data) => Employee.fromJson(data as Map<String, Object?>))
+        .toList(),
+    holidaysApiToken: holidaysApiToken,
+  );
+}
+
+Future<Uint8List> createTimesheet({
+  required Config config,
+  required List<Division> allDivisions,
+  required List<Department> allDepartments,
+  required List<Employee> allEmployees,
+  String? holidaysApiToken,
+}) async {
   await initializeDateFormatting('pt_BR');
 
-  final config = Config.fromJson(yamlData['config'] as Map);
   final now = DateTime(config.year, config.month);
 
   final headerPath = config.headerPath;
@@ -26,9 +50,7 @@ Future<Uint8List> createTimesheet(Map<String, Object?> yamlData) async {
     headerBytes = await File(headerPath).readAsBytes();
   }
 
-  final Map<String, Division> divisions =
-      (yamlData['diretorias'] as List).fold({}, (acc, data) {
-    final current = Division.fromJson(data as Map);
+  final Map<String, Division> divisions = allDivisions.fold({}, (acc, current) {
     final id = '${current.id}/${current.companyName}';
     final previous = acc[id];
     if (previous != null) {
@@ -45,8 +67,7 @@ Future<Uint8List> createTimesheet(Map<String, Object?> yamlData) async {
   }
 
   final Map<String, Department> departments =
-      (yamlData['departamentos'] as List).fold({}, (acc, data) {
-    final current = Department.fromJson(data as Map);
+      allDepartments.fold({}, (acc, current) {
     final id = '${current.id}/${current.location}';
     final previous = acc[id];
     if (previous != null) {
@@ -59,9 +80,7 @@ Future<Uint8List> createTimesheet(Map<String, Object?> yamlData) async {
     return acc;
   });
 
-  final Map<String, Employee> employees =
-      (yamlData['servidores'] as List).fold({}, (acc, data) {
-    final current = Employee.fromJson(data as Map);
+  final Map<String, Employee> employees = allEmployees.fold({}, (acc, current) {
     final id = '${current.id}/${current.location}';
     final previous = acc[id];
     if (previous != null) {
@@ -73,9 +92,6 @@ Future<Uint8List> createTimesheet(Map<String, Object?> yamlData) async {
     acc[id] = current;
     return acc;
   });
-
-  final DotEnv env = DotEnv()..load();
-  final String? holidaysApiToken = env['HOLIDAYS_API_TOKEN'];
 
   final Set<DateTime> holidays;
   if (holidaysApiToken == null) {
