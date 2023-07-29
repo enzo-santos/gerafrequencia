@@ -1,0 +1,187 @@
+{
+  "$defs": {
+    "ConfiguracaoArquivo": {
+      "properties": {
+        "ano": {
+          "description": "ano de referência da lista de frequência a ser gerada",
+          "maximum": 9999,
+          "minimum": 0,
+          "title": "Ano",
+          "type": "integer"
+        },
+        "mes": {
+          "description": "mês de referência da lista de frequência a ser gerada",
+          "maximum": 12,
+          "minimum": 1,
+          "title": "Mes",
+          "type": "integer"
+        },
+        "cabecalho": {
+          "anyOf": [
+            {
+              "format": "file-path",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "caminho do arquivo para ser utilizado como cabeçalho do PDF gerado, de preferência PNG",
+          "title": "Cabecalho"
+        },
+        "enforcar": {
+          "description": "se segundas e sextas devem ser facultadas caso sua terça posterior e sua quinta anterior, respectivamente, sejam feriados",
+          "title": "Enforcar",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "ano",
+        "mes",
+        "cabecalho",
+        "enforcar"
+      ],
+      "title": "ConfiguracaoArquivo",
+      "type": "object"
+    },
+    "Departamento": {
+      "properties": {
+        "sigla": {
+          "description": "nome abreviado deste departamento, como uma sigla",
+          "title": "Sigla",
+          "type": "string"
+        },
+        "diretoria": {
+          "description": "sigla da diretoria no qual este departamento está contido; deve estar no formato A/B, onde A e B são uma `sigla` e um `orgao`, respectivamente, presentes em uma Diretoria",
+          "title": "Diretoria",
+          "type": "string"
+        },
+        "nome": {
+          "description": "nome completo deste departamento",
+          "title": "Nome",
+          "type": "string"
+        },
+        "telefone": {
+          "description": "telefone para contato deste departamento",
+          "title": "Telefone",
+          "type": "string"
+        },
+        "email": {
+          "description": "e-mail para contato deste departamento",
+          "format": "email",
+          "title": "Email",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sigla",
+        "diretoria",
+        "nome",
+        "telefone",
+        "email"
+      ],
+      "title": "Departamento",
+      "type": "object"
+    },
+    "Diretoria": {
+      "properties": {
+        "sigla": {
+          "description": "nome abreviado desta diretoria, como uma sigla",
+          "title": "Sigla",
+          "type": "string"
+        },
+        "orgao": {
+          "description": "nome abreviado do órgão ao qual esta diretoria está subordinada, como uma sigla",
+          "title": "Orgao",
+          "type": "string"
+        },
+        "nome": {
+          "description": "nome completo desta diretoria",
+          "title": "Nome",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sigla",
+        "orgao",
+        "nome"
+      ],
+      "title": "Diretoria",
+      "type": "object"
+    },
+    "Servidor": {
+      "properties": {
+        "matricula": {
+          "description": "código de matrícula deste servidor",
+          "title": "Matricula",
+          "type": "string"
+        },
+        "departamento": {
+          "description": "sigla do departamento no qual este servidor está lotado; deve estar no formato A/B, onde A e B são uma `sigla` e uma `diretoria`, respectivamente, presentes em um Departamento",
+          "title": "Departamento",
+          "type": "string"
+        },
+        "nome": {
+          "description": "nome completo deste servidor",
+          "title": "Nome",
+          "type": "string"
+        },
+        "cargo": {
+          "description": "cargo funcional deste servidor",
+          "title": "Cargo",
+          "type": "string"
+        }
+      },
+      "required": [
+        "matricula",
+        "departamento",
+        "nome",
+        "cargo"
+      ],
+      "title": "Servidor",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "config": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ConfiguracaoArquivo"
+        }
+      ],
+      "description": "parâmetros de geração do arquivo de saída"
+    },
+    "diretorias": {
+      "description": "diretorias a serem consideradas ao validar departamentos",
+      "items": {
+        "$ref": "#/$defs/Diretoria"
+      },
+      "title": "Diretorias",
+      "type": "array"
+    },
+    "departamentos": {
+      "description": "departamentos a serem considerados ao validar servidores",
+      "items": {
+        "$ref": "#/$defs/Departamento"
+      },
+      "title": "Departamentos",
+      "type": "array"
+    },
+    "servidores": {
+      "description": "servidores a serem considerados ao criar a lista de frequência; o número de páginas do PDF gerado terá o mesmo valor do comprimento desta lista",
+      "items": {
+        "$ref": "#/$defs/Servidor"
+      },
+      "title": "Servidores",
+      "type": "array"
+    }
+  },
+  "required": [
+    "config",
+    "diretorias",
+    "departamentos",
+    "servidores"
+  ],
+  "title": "Arquivo",
+  "type": "object"
+}
