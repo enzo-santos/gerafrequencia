@@ -19,13 +19,13 @@ Future<Uint8List> createTimesheetFromJson(Map<String, Object?> jsonData) async {
   return createTimesheet(
     config: Config.fromJson(jsonData['config'] as Map),
     allDivisions: (jsonData['diretorias'] as List)
-        .map((data) => Division.fromJson(data as Map<String, Object?>))
+        .map((data) => Division.fromJson(data as Map))
         .toList(),
     allDepartments: (jsonData['departamentos'] as List)
-        .map((data) => Department.fromJson(data as Map<String, Object?>))
+        .map((data) => Department.fromJson(data as Map))
         .toList(),
     allEmployees: (jsonData['servidores'] as List)
-        .map((data) => Employee.fromJson(data as Map<String, Object?>))
+        .map((data) => Employee.fromJson(data as Map))
         .toList(),
     holidaysApiToken: holidaysApiToken,
   );
