@@ -20,8 +20,7 @@ dependencies:
 
   gerafrequencia:
     path: ..
-  file_saver:
-    path: C:/Users/enzos/Projects/file_saver
+  file_saver: ^0.2.9
 
 dev_dependencies:
   flutter_lints: ^2.0.0
