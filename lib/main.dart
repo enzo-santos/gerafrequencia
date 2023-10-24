@@ -93,10 +93,9 @@ Future<Uint8List> createTimesheet({
     return acc;
   });
 
-  final Set<DateTime> holidays;
-  if (holidaysApiToken == null) {
-    holidays = {};
-  } else {
+  final Set<DateTime> holidays = {};
+  final Set<DateTime> additionalHolidays = config.additionalHolidays.map((day) => DateTime(config.year, config.month, day)).toSet();
+  if (holidaysApiToken != null) {
     final Uri apiUrl = Uri(
       scheme: 'https',
       host: 'api.invertexto.com',
@@ -104,13 +103,14 @@ Future<Uint8List> createTimesheet({
       queryParameters: {'token': holidaysApiToken, 'estado': 'PA'},
     );
     final http.Response response = await http.get(apiUrl);
-    holidays = (json.decode(response.body) as List)
+    holidays.addAll((json.decode(response.body) as List)
         .cast<Map>()
         .map(Holiday.fromJson)
         .map((holiday) => holiday.date)
         .where(now.isAtSameMonthAs)
-        .toSet();
+        .toSet());
   }
+  holidays.addAll(config.holidays.map((day) => DateTime(config.year, config.month, day)));
 
   final pw.Document pdf = pw.Document();
   for (Employee employee in employees.values) {
@@ -228,6 +228,8 @@ Future<Uint8List> createTimesheet({
                     text = 'Domingo';
                   } else if (holidays.contains(date.date)) {
                     text = 'FERIADO';
+                  } else if (additionalHolidays.contains(date.date)) {
+                    text = 'FACULTADO';
                   } else if (config.fill) {
                     const Duration oneDay = Duration(days: 1);
                     final DateTime yesterday = date.subtract(oneDay);

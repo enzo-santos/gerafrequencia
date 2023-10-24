@@ -64,6 +64,14 @@ abstract class _Config {
   /// como facultado.
   @Field(name: 'enforcar', defaultValue: false)
   bool get fill;
+
+  /// Os dias considerados feriados no mês [month] do ano [year].
+  @Field(name: 'feriados', defaultValue: [])
+  List<int> get holidays;
+
+  /// Os dias considerados facultados no mês [month] do ano [year].
+  @Field(name: 'facultados', defaultValue: [])
+  List<int> get additionalHolidays;
 }
 
 @Data()
