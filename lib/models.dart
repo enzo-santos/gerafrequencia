@@ -95,7 +95,7 @@ abstract class _Department {
 @Data()
 abstract class _Employee {
   @Field(name: 'matricula')
-  String get id;
+  String? get id;
 
   @Field(name: 'nome')
   String get name;

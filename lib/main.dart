@@ -80,21 +80,27 @@ Future<Uint8List> createTimesheet({
     return acc;
   });
 
-  final Map<String, Employee> employees = allEmployees.fold({}, (acc, current) {
-    final id = '${current.id}/${current.location}';
-    final previous = acc[id];
-    if (previous != null) {
-      throw StateError(
-        'servidores ${previous.name} e ${current.name} '
-        'têm a mesma matrícula dentro do mesmo departamento: $id',
-      );
+  allEmployees.fold({}, (acc, current) {
+    final localId = current.id;
+    if (localId != null) {
+      final globalId = '${localId}/${current.location}';
+      final previous = acc[globalId];
+      if (previous != null) {
+        throw StateError(
+          'servidores ${previous.name} e ${current.name} '
+          'têm a mesma matrícula dentro do mesmo departamento: $localId',
+        );
+      }
+      acc[globalId] = current;
     }
-    acc[id] = current;
     return acc;
   });
+  final List<Employee> employees = allEmployees;
 
   final Set<DateTime> holidays = {};
-  final Set<DateTime> additionalHolidays = config.additionalHolidays.map((day) => DateTime(config.year, config.month, day)).toSet();
+  final Set<DateTime> additionalHolidays = config.additionalHolidays
+      .map((day) => DateTime(config.year, config.month, day))
+      .toSet();
   if (holidaysApiToken != null) {
     final Uri apiUrl = Uri(
       scheme: 'https',
@@ -110,10 +116,11 @@ Future<Uint8List> createTimesheet({
         .where(now.isAtSameMonthAs)
         .toSet());
   }
-  holidays.addAll(config.holidays.map((day) => DateTime(config.year, config.month, day)));
+  holidays.addAll(
+      config.holidays.map((day) => DateTime(config.year, config.month, day)));
 
   final pw.Document pdf = pw.Document();
-  for (Employee employee in employees.values) {
+  for (Employee employee in employees) {
     final department = departments[employee.location];
     if (department == null) {
       throw StateError(
@@ -196,18 +203,19 @@ Future<Uint8List> createTimesheet({
                           ],
                         ),
                       ),
-                      pw.RichText(
-                        text: pw.TextSpan(
-                          children: [
-                            const pw.TextSpan(text: 'Matrícula: '),
-                            pw.TextSpan(
-                              text: employee.id,
-                              style:
-                                  pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                            ),
-                          ],
+                      if (employee.id != null)
+                        pw.RichText(
+                          text: pw.TextSpan(
+                            children: [
+                              const pw.TextSpan(text: 'Matrícula: '),
+                              pw.TextSpan(
+                                text: employee.id,
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ],
