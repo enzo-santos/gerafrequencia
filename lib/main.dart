@@ -19,13 +19,13 @@ Future<Uint8List> createTimesheetFromJson(Map<String, Object?> jsonData) async {
   return createTimesheet(
     config: Config.fromJson(jsonData['config'] as Map),
     allDivisions: (jsonData['diretorias'] as List)
-        .map((data) => Division.fromJson(data as Map<String, Object?>))
+        .map((data) => Division.fromJson(data as Map))
         .toList(),
     allDepartments: (jsonData['departamentos'] as List)
-        .map((data) => Department.fromJson(data as Map<String, Object?>))
+        .map((data) => Department.fromJson(data as Map))
         .toList(),
     allEmployees: (jsonData['servidores'] as List)
-        .map((data) => Employee.fromJson(data as Map<String, Object?>))
+        .map((data) => Employee.fromJson(data as Map))
         .toList(),
     holidaysApiToken: holidaysApiToken,
   );
@@ -80,23 +80,28 @@ Future<Uint8List> createTimesheet({
     return acc;
   });
 
-  final Map<String, Employee> employees = allEmployees.fold({}, (acc, current) {
-    final id = '${current.id}/${current.location}';
-    final previous = acc[id];
-    if (previous != null) {
-      throw StateError(
-        'servidores ${previous.name} e ${current.name} '
-        'têm a mesma matrícula dentro do mesmo departamento: $id',
-      );
+  allEmployees.fold({}, (acc, current) {
+    final localId = current.id;
+    if (localId != null) {
+      final globalId = '${localId}/${current.location}';
+      final previous = acc[globalId];
+      if (previous != null) {
+        throw StateError(
+          'servidores ${previous.name} e ${current.name} '
+          'têm a mesma matrícula dentro do mesmo departamento: $localId',
+        );
+      }
+      acc[globalId] = current;
     }
-    acc[id] = current;
     return acc;
   });
+  final List<Employee> employees = allEmployees;
 
-  final Set<DateTime> holidays;
-  if (holidaysApiToken == null) {
-    holidays = {};
-  } else {
+  final Set<DateTime> holidays = {};
+  final Set<DateTime> additionalHolidays = config.additionalHolidays
+      .map((day) => DateTime(config.year, config.month, day))
+      .toSet();
+  if (holidaysApiToken != null) {
     final Uri apiUrl = Uri(
       scheme: 'https',
       host: 'api.invertexto.com',
@@ -104,16 +109,18 @@ Future<Uint8List> createTimesheet({
       queryParameters: {'token': holidaysApiToken, 'estado': 'PA'},
     );
     final http.Response response = await http.get(apiUrl);
-    holidays = (json.decode(response.body) as List)
+    holidays.addAll((json.decode(response.body) as List)
         .cast<Map>()
         .map(Holiday.fromJson)
         .map((holiday) => holiday.date)
         .where(now.isAtSameMonthAs)
-        .toSet();
+        .toSet());
   }
+  holidays.addAll(
+      config.holidays.map((day) => DateTime(config.year, config.month, day)));
 
   final pw.Document pdf = pw.Document();
-  for (Employee employee in employees.values) {
+  for (Employee employee in employees) {
     final department = departments[employee.location];
     if (department == null) {
       throw StateError(
@@ -196,18 +203,19 @@ Future<Uint8List> createTimesheet({
                           ],
                         ),
                       ),
-                      pw.RichText(
-                        text: pw.TextSpan(
-                          children: [
-                            const pw.TextSpan(text: 'Matrícula: '),
-                            pw.TextSpan(
-                              text: employee.id,
-                              style:
-                                  pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                            ),
-                          ],
+                      if (employee.id != null)
+                        pw.RichText(
+                          text: pw.TextSpan(
+                            children: [
+                              const pw.TextSpan(text: 'Matrícula: '),
+                              pw.TextSpan(
+                                text: employee.id,
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ],
@@ -228,6 +236,8 @@ Future<Uint8List> createTimesheet({
                     text = 'Domingo';
                   } else if (holidays.contains(date.date)) {
                     text = 'FERIADO';
+                  } else if (additionalHolidays.contains(date.date)) {
+                    text = 'FACULTADO';
                   } else if (config.fill) {
                     const Duration oneDay = Duration(days: 1);
                     final DateTime yesterday = date.subtract(oneDay);
