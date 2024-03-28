@@ -414,6 +414,8 @@ class _ConfigBuilder extends ChangeNotifier {
       month: referenceDateTime.month,
       headerPath: headerFilePath,
       fill: fill,
+      holidays: [],
+      additionalHolidays: [],
     );
   }
 }

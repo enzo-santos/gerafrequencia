@@ -83,7 +83,7 @@ Future<Uint8List> createTimesheet({
   allEmployees.fold({}, (acc, current) {
     final localId = current.id;
     if (localId != null) {
-      final globalId = '${localId}/${current.location}';
+      final globalId = '$localId/${current.location}';
       final previous = acc[globalId];
       if (previous != null) {
         throw StateError(
