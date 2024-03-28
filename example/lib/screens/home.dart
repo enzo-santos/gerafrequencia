@@ -170,7 +170,7 @@ class HomeScreen extends StatelessWidget {
       child: Consumer<_State>(
         builder: (context, state, _) {
           final AppTheme appTheme = context.read<AppTheme>();
-          final int? index = state.selected;
+          final int index = state.selected;
           return NavigationView(
             //key: viewKey,
             appBar: NavigationAppBar(
@@ -205,41 +205,38 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            paneBodyBuilder: index == null
-                ? null
-                : (item, child) {
-                    final name = item?.key is ValueKey
-                        ? (item!.key as ValueKey).value
-                        : null;
-                    return FocusTraversalGroup(
-                      key: ValueKey('body$name'),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: switch (index) {
-                          0 => _ConfigBody(),
-                          1 => _Collection<Division>(
-                              values: state.divisions,
-                              titleBuilder: (division) => division.name,
-                              subtitleBuilder: (division) =>
-                                  '${division.id}/${division.companyName}',
-                            ),
-                          2 => _Collection<Department>(
-                              values: state.departments,
-                              titleBuilder: (department) => department.name,
-                              subtitleBuilder: (department) =>
-                                  '${department.id}/${department.location}',
-                            ),
-                          3 => _Collection<Employee>(
-                              values: state.employees,
-                              titleBuilder: (employee) => employee.name,
-                              subtitleBuilder: (employee) =>
-                                  '${employee.id} (${employee.location})',
-                            ),
-                          _ => const SizedBox.shrink(),
-                        },
+            paneBodyBuilder: (item, child) {
+              final name =
+                  item?.key is ValueKey ? (item!.key as ValueKey).value : null;
+              return FocusTraversalGroup(
+                key: ValueKey('body$name'),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: switch (index) {
+                    0 => const _ConfigBody(),
+                    1 => _Collection<Division>(
+                        values: state.divisions,
+                        titleBuilder: (division) => division.name,
+                        subtitleBuilder: (division) =>
+                            '${division.id}/${division.companyName}',
                       ),
-                    );
+                    2 => _Collection<Department>(
+                        values: state.departments,
+                        titleBuilder: (department) => department.name,
+                        subtitleBuilder: (department) =>
+                            '${department.id}/${department.location}',
+                      ),
+                    3 => _Collection<Employee>(
+                        values: state.employees,
+                        titleBuilder: (employee) => employee.name,
+                        subtitleBuilder: (employee) =>
+                            '${employee.id} (${employee.location})',
+                      ),
+                    _ => const SizedBox.shrink(),
                   },
+                ),
+              );
+            },
             pane: NavigationPane(
               selected: state.selected,
               onChanged: (index) => state.updateIndex(index),
