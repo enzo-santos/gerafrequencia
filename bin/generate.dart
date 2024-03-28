@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
-import 'package:gerafrequencia/main.dart';
-import 'package:gerafrequencia/models.dart';
+import 'package:gerafrequencia/gerafrequencia.dart';
+import 'package:gerafrequencia/src/main.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
@@ -16,8 +16,8 @@ void main(List<String> args) async {
     );
   final results = parser.parse(args);
 
-  final configFile =
-      File(results.rest.firstOrNull ?? p.join('assets', 'gerafrequencia.config.yaml'));
+  final configFile = File(results.rest.firstOrNull ??
+      p.join('assets', 'gerafrequencia.config.yaml'));
 
   final data = loadYaml(await configFile.readAsString()) as YamlMap;
   final config = Config.fromJson(data['config']);

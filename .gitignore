@@ -38,3 +38,5 @@ doc/api/
 
 *.g.dart
 *.dorm.dart
+!lib/src/models.dorm.dart
+!lib/src/models.g.dart
