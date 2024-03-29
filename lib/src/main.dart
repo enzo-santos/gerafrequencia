@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dartx/dartx.dart';
@@ -37,23 +36,12 @@ Future<Uint8List> createTimesheet({
   required List<Department> allDepartments,
   required List<Employee> allEmployees,
   String? holidaysApiToken,
-  Uint8List? headerBytes,
 }) async {
   await initializeDateFormatting('pt_BR');
 
   final now = DateTime(config.year, config.month);
 
-  final headerPath = config.headerPath;
-  final Uint8List? pdfHeaderBytes;
-  if (headerPath == null) {
-    if (headerBytes == null) {
-      pdfHeaderBytes = null;
-    } else {
-      pdfHeaderBytes = headerBytes;
-    }
-  } else {
-    pdfHeaderBytes = await File(headerPath).readAsBytes();
-  }
+  final Uint8List? headerBytes = config.headerBytes?.bytes;
 
   final Map<String, Division> divisions = allDivisions.fold({}, (acc, current) {
     final id = '${current.id}/${current.companyName}';
@@ -148,10 +136,10 @@ Future<Uint8List> createTimesheet({
       build: (context) {
         return pw.Column(
           children: [
-            if (pdfHeaderBytes != null)
+            if (headerBytes != null)
               pw.ClipRect(
                 child: pw.Image(
-                  pw.MemoryImage(pdfHeaderBytes.buffer.asUint8List()),
+                  pw.MemoryImage(headerBytes.buffer.asUint8List()),
                   fit: pw.BoxFit.contain,
                   alignment: pw.Alignment.topCenter,
                 ),

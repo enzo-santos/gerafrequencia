@@ -75,7 +75,9 @@ Config _$ConfigFromJson(Map json) {
   return Config(
     year: json['ano'] as int,
     month: json['mes'] as int,
-    headerPath: json['cabecalho'] as String?,
+    headerBytes: json['cabecalho'] == null
+        ? null
+        : Base64Data.fromJson(json['cabecalho'] as String),
     fill: json['enforcar'] as bool? ?? false,
     holidays:
         (json['feriados'] as List<dynamic>?)?.map((e) => e as int).toList() ??
@@ -89,7 +91,7 @@ Config _$ConfigFromJson(Map json) {
 Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
       'ano': instance.year,
       'mes': instance.month,
-      'cabecalho': instance.headerPath,
+      'cabecalho': instance.headerBytes?.toJson(),
       'enforcar': instance.fill,
       'feriados': instance.holidays,
       'facultados': instance.additionalHolidays,

@@ -350,7 +350,7 @@ class _ConfigBody extends StatelessWidget {
           child: const Text('gerar arquivo'),
           onPressed: () async {
             final _State state = context.read<_State>();
-            final Config config = context.read<_ConfigBuilder>().config;
+            final Config config = await context.read<_ConfigBuilder>().build();
             final Uint8List bytes = await createTimesheet(
               config: config,
               allDivisions: state.divisions,
@@ -404,11 +404,18 @@ class _ConfigBuilder extends ChangeNotifier {
     notifyListeners();
   }
 
-  Config get config {
+  Future<Config> build() async {
+    final Uint8List? headerBytes;
+    final String? headerFilePath = _headerFilePath;
+    if (headerFilePath == null) {
+      headerBytes = null;
+    } else {
+      headerBytes = await File(headerFilePath).readAsBytes();
+    }
     return Config(
       year: referenceDateTime.year,
       month: referenceDateTime.month,
-      headerPath: headerFilePath,
+      headerBytes: headerBytes == null ? null : Base64Data(headerBytes),
       fill: fill,
       holidays: [],
       additionalHolidays: [],

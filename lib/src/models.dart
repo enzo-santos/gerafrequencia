@@ -1,9 +1,24 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:dorm_annotations/dorm_annotations.dart';
 import 'package:dorm_framework/dorm_framework.dart';
 
 part 'models.dorm.dart';
 
 part 'models.g.dart';
+
+class Base64Data {
+  final Uint8List bytes;
+
+  factory Base64Data.fromJson(String data) {
+    return Base64Data(base64.decode(data));
+  }
+
+  const Base64Data(this.bytes);
+
+  String toJson() => base64.encode(bytes);
+}
 
 @Data()
 abstract class _Address {
@@ -56,9 +71,9 @@ abstract class _Config {
   @Field(name: 'mes')
   int get month;
 
-  /// Caminho absoluto da imagem para ser usada como cabeçalho.
+  /// Conteúdo da imagem a ser usada como cabeçalho.
   @Field(name: 'cabecalho')
-  String? get headerPath;
+  Base64Data? get headerBytes;
 
   /// Se o único dia entre um domingo e um feriado deve ser considerado
   /// como facultado.
