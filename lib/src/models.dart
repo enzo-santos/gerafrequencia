@@ -8,14 +8,14 @@ part 'models.dorm.dart';
 
 part 'models.g.dart';
 
-class Base64Data {
+class BinaryData {
   final Uint8List bytes;
 
-  factory Base64Data.fromJson(String data) {
-    return Base64Data(base64.decode(data));
+  factory BinaryData.fromJson(String data) {
+    return BinaryData(base64.decode(data));
   }
 
-  const Base64Data(this.bytes);
+  const BinaryData(this.bytes);
 
   String toJson() => base64.encode(bytes);
 }
@@ -73,7 +73,7 @@ abstract class _Config {
 
   /// Conteúdo da imagem a ser usada como cabeçalho.
   @Field(name: 'cabecalho')
-  Base64Data? get headerBytes;
+  BinaryData? get headerData;
 
   /// Se o único dia entre um domingo e um feriado deve ser considerado
   /// como facultado.

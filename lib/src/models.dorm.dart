@@ -122,7 +122,7 @@ class Config {
   const Config({
     required this.year,
     required this.month,
-    required this.headerBytes,
+    required this.headerData,
     required this.fill,
     required this.holidays,
     required this.additionalHolidays,
@@ -143,7 +143,7 @@ class Config {
   final int month;
 
   @JsonKey(name: 'cabecalho')
-  final Base64Data? headerBytes;
+  final BinaryData? headerData;
 
   @JsonKey(
     name: 'enforcar',

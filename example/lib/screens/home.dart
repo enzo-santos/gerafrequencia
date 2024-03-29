@@ -415,7 +415,7 @@ class _ConfigBuilder extends ChangeNotifier {
     return Config(
       year: referenceDateTime.year,
       month: referenceDateTime.month,
-      headerBytes: headerBytes == null ? null : Base64Data(headerBytes),
+      headerData: headerBytes == null ? null : BinaryData(headerBytes),
       fill: fill,
       holidays: [],
       additionalHolidays: [],

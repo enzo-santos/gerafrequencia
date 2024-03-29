@@ -41,7 +41,7 @@ Future<Uint8List> createTimesheet({
 
   final now = DateTime(config.year, config.month);
 
-  final Uint8List? headerBytes = config.headerBytes?.bytes;
+  final Uint8List? headerBytes = config.headerData?.bytes;
 
   final Map<String, Division> divisions = allDivisions.fold({}, (acc, current) {
     final id = '${current.id}/${current.companyName}';
