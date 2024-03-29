@@ -37,17 +37,22 @@ Future<Uint8List> createTimesheet({
   required List<Department> allDepartments,
   required List<Employee> allEmployees,
   String? holidaysApiToken,
+  Uint8List? headerBytes,
 }) async {
   await initializeDateFormatting('pt_BR');
 
   final now = DateTime(config.year, config.month);
 
   final headerPath = config.headerPath;
-  final Uint8List? headerBytes;
+  final Uint8List? pdfHeaderBytes;
   if (headerPath == null) {
-    headerBytes = null;
+    if (headerBytes == null) {
+      pdfHeaderBytes = null;
+    } else {
+      pdfHeaderBytes = headerBytes;
+    }
   } else {
-    headerBytes = await File(headerPath).readAsBytes();
+    pdfHeaderBytes = await File(headerPath).readAsBytes();
   }
 
   final Map<String, Division> divisions = allDivisions.fold({}, (acc, current) {
@@ -143,10 +148,10 @@ Future<Uint8List> createTimesheet({
       build: (context) {
         return pw.Column(
           children: [
-            if (headerBytes != null)
+            if (pdfHeaderBytes != null)
               pw.ClipRect(
                 child: pw.Image(
-                  pw.MemoryImage(headerBytes.buffer.asUint8List()),
+                  pw.MemoryImage(pdfHeaderBytes.buffer.asUint8List()),
                   fit: pw.BoxFit.contain,
                   alignment: pw.Alignment.topCenter,
                 ),
